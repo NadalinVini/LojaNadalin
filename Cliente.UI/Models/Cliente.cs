@@ -9,6 +9,7 @@ namespace Cliente.UI.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class Cliente : IdentityUser
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public long? EnderecoId { get; set; }

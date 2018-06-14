@@ -12,19 +12,23 @@ namespace Cliente.UI.Controllers
 {
     public class EnderecosController : Controller
     {
-        protected readonly Services.IRepositoryGeneric<Endereco> repository;
-        protected readonly Services.IRepositoryGeneric<Cidade> repositoryCidade;
+        private readonly Services.IRepositoryGeneric<Endereco> repository;
+        private readonly Services.IRepositoryGeneric<Cidade> repositoryCidade;
 
-        public EnderecosController(Services.EnderecoRepository repo,
-            Services.RepositoryGeneric<Cidade> repoCidade)
+        public EnderecosController(
+            Services.IRepositoryGeneric<Endereco> repoEndereco,
+            Services.IRepositoryGeneric<Cidade> repoCidade)
         {
-            repository = repo;
+            repository = repoEndereco;
+            repositoryCidade = repoCidade;
         }
 
         // GET: Enderecoes
         public async Task<IActionResult> Index()
         {
-            return View(await repository.GetAllAsync());
+            var list = await repository
+                .GetAllAsync(e => e.Cidade);
+            return View(list);
         }
 
         // GET: Enderecoes/Details/5

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Cliente.UI.Services
@@ -23,9 +24,14 @@ namespace Cliente.UI.Services
             return DbSet.Find(id);
         }
 
-        public virtual List<T> GetAll()
+        public virtual List<T> GetAll(params Expression<Func<T, object>>[] includeProperties)
         {
-            return DbSet.ToList();
+            IQueryable<T> queryable = DbSet;
+
+            foreach (var includeProperty in includeProperties)
+                queryable = queryable.Include(includeProperty);
+
+            return queryable.ToList();
         }
 
         public virtual bool Update(object id, T updated)
@@ -45,9 +51,14 @@ namespace Cliente.UI.Services
             return true;
         }
 
-        public virtual async Task<List<T>> GetAllAsync()
+        public virtual async Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
         {
-            return await DbSet.ToListAsync();
+            IQueryable<T> queryable = DbSet;
+
+            foreach (var includeProperty in includeProperties)
+                queryable = queryable.Include(includeProperty);
+
+            return await queryable.ToListAsync();
         }
 
         public virtual async Task<T> GetAsync(object id)

@@ -36,10 +36,8 @@ namespace Cliente.UI
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddScoped(typeof(IRepositoryGeneric<>), typeof(RepositoryGeneric<>));
-
-            // Repositórios específicos
-            services.AddScoped(typeof(IRepositoryGeneric<>), typeof(EnderecoRepository));
+            services.AddTransient(typeof(IRepositoryGeneric<>), typeof(RepositoryGeneric<>));
+            services.AddTransient(typeof(IRepositoryGeneric<Models.Endereco>), typeof(EnderecoRepository));
 
             services.AddMvc();
         }

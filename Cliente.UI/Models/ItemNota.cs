@@ -1,4 +1,6 @@
-﻿namespace Cliente.UI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Cliente.UI.Models
 {
     public class ItemNota
     {
@@ -8,6 +10,8 @@
         public System.Guid NotaFiscalId { get; set; }
         public NotaFiscal NotaFiscal { get; set; }
 
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal ValorUnitario { get; set; }
         public decimal Quantidade { get; set; }
         public decimal PercentualDesconto { get; set; }
