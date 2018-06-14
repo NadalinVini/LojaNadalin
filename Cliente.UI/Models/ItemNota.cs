@@ -14,6 +14,7 @@ namespace Cliente.UI.Models
         [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal ValorUnitario { get; set; }
         public decimal Quantidade { get; set; }
+        [DisplayFormat(DataFormatString = @"{0:#\%}")]
         public decimal PercentualDesconto { get; set; }
     }
 }

@@ -12,21 +12,24 @@ namespace Cliente.UI.Controllers
 {
     public class EnderecosController : Controller
     {
-        private readonly Services.IRepositoryGeneric<Endereco> repository;
+        private readonly Services.IRepositoryGeneric<Endereco> repositoryEndereco;
         private readonly Services.IRepositoryGeneric<Cidade> repositoryCidade;
+        private readonly Services.IRepositoryGeneric<Estado> repositoryEstado;
 
         public EnderecosController(
             Services.IRepositoryGeneric<Endereco> repoEndereco,
-            Services.IRepositoryGeneric<Cidade> repoCidade)
+            Services.IRepositoryGeneric<Cidade> repoCidade,
+            Services.IRepositoryGeneric<Estado> repoEstado)
         {
-            repository = repoEndereco;
+            repositoryEndereco = repoEndereco;
             repositoryCidade = repoCidade;
+            repositoryEstado = repoEstado;
         }
 
         // GET: Enderecoes
         public async Task<IActionResult> Index()
         {
-            var list = await repository
+            var list = await repositoryEndereco
                 .GetAllAsync(e => e.Cidade);
             return View(list);
         }
@@ -39,7 +42,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var endereco = await repository.GetAsync(id.Value);
+            var endereco = await repositoryEndereco.GetAsync(id.Value);
             if (endereco == null)
             {
                 return NotFound();
@@ -48,10 +51,25 @@ namespace Cliente.UI.Controllers
             return View(endereco);
         }
 
+        public List<Cidade> GetCidades(long? id)
+        {
+            if (id == null)
+                return null;
+
+            return repositoryCidade
+                .Filter(c => c.EstadoId == id.Value);
+        }
+
         // GET: Enderecoes/Create
         public IActionResult Create()
         {
-            ViewData["CidadeId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome");
+            ViewData["CidadeId"] = new SelectList(new List<Cidade>
+            { new Cidade { Nome = "Selecione o Estado" } }, "Id", "Nome");
+
+            var estadoList = repositoryEstado.GetAll();
+            estadoList.Insert(0, new Estado { Nome = "Selecione" });
+
+            ViewData["EstadoId"] = new SelectList(estadoList, "Id", "Nome");
             return View();
         }
 
@@ -62,13 +80,20 @@ namespace Cliente.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CidadeId,Cep")] Endereco endereco)
         {
-            if (ModelState.IsValid)
+            
+            if (ModelState.IsValid && endereco.CidadeId > 0)
             {
-                await repository.InsertAsync(endereco);
+                await repositoryEndereco.InsertAsync(endereco);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CidadeId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome", endereco.CidadeId);
+            ViewData["CidadeId"] = new SelectList(new List<Cidade>
+            { new Cidade { Nome = "Selecione o Estado" } }, "Id", "Nome", endereco.CidadeId);
+
+            var estadoList = repositoryEstado.GetAll();
+            estadoList.Insert(0, new Estado { Nome = "Selecione" });
+
+            ViewData["EstadoId"] = new SelectList(estadoList, "Id", "Nome");
             return View(endereco);
         }
 
@@ -80,12 +105,16 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var endereco = await repository.GetAsync(id.Value);
+            var endereco = await repositoryEndereco
+                .GetByAsync(e => e.Id == id, e => e.Cidade);
             if (endereco == null)
             {
                 return NotFound();
             }
-            ViewData["CidadeId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome", endereco.CidadeId);
+
+            ViewData["CidadeId"] = new SelectList(new List<Cidade>
+            { new Cidade { Nome = "Selecione o Estado", Id = -1} }, "Id", "Nome", endereco.CidadeId);
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "Id", "Nome", endereco.Cidade.EstadoId);
             return View(endereco);
         }
 
@@ -103,7 +132,7 @@ namespace Cliente.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                await repository.UpdateAsync(endereco.Id, endereco);
+                await repositoryEndereco.UpdateAsync(endereco.Id, endereco);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -120,7 +149,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var endereco = await repository.GetAsync(id);
+            var endereco = await repositoryEndereco.GetAsync(id);
             if (endereco == null)
             {
                 return NotFound();
@@ -134,7 +163,7 @@ namespace Cliente.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            await repository.RemoveAsync(id);
+            await repositoryEndereco.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

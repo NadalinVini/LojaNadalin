@@ -66,6 +66,16 @@ namespace Cliente.UI.Services
             return await DbSet.FindAsync(id);
         }
 
+        public virtual async Task<T> GetByAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> queryable = DbSet;
+
+            foreach (var includeProperty in includeProperties)
+                queryable = queryable.Include(includeProperty);
+
+            return await queryable.FirstOrDefaultAsync(where);
+        }
+
         public virtual async Task<bool> RemoveAsync(object id)
         {
             var resource = await GetAsync(id);
@@ -115,6 +125,13 @@ namespace Cliente.UI.Services
         public virtual bool Exists(object id)
         {
             return Get(id) != null;
+        }
+
+        public virtual List<T> Filter(Func<T, bool> where)
+        {
+            return DbSet
+                .Where(where)
+                .ToList();
         }
     }
 }

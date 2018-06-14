@@ -24,5 +24,9 @@ namespace Cliente.UI.Data
         }
 
         public DbSet<Cliente.UI.Models.Endereco> Endereco { get; set; }
+
+        public DbSet<Cliente.UI.Models.Estado> Estado { get; set; }
+
+        public DbSet<Cliente.UI.Models.Cidade> Cidade { get; set; }
     }
 }
