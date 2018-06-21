@@ -11,9 +11,10 @@ using System;
 namespace Cliente.UI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180621111737_Cidade")]
+    partial class Cidade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,23 +159,6 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("Marca");
                 });
 
-            modelBuilder.Entity("Cliente.UI.Models.Produto", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<long>("MarcaId");
-
-                    b.Property<string>("Nome")
-                        .HasMaxLength(70);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MarcaId");
-
-                    b.ToTable("Produto");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -303,14 +287,6 @@ namespace Cliente.UI.Data.Migrations
                     b.HasOne("Cliente.UI.Models.Cidade", "Cidade")
                         .WithMany()
                         .HasForeignKey("CidadeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Cliente.UI.Models.Produto", b =>
-                {
-                    b.HasOne("Cliente.UI.Models.Marca", "Marca")
-                        .WithMany()
-                        .HasForeignKey("MarcaId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

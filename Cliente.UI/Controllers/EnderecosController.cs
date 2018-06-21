@@ -30,7 +30,7 @@ namespace Cliente.UI.Controllers
         public async Task<IActionResult> Index()
         {
             var list = await repositoryEndereco
-                .GetAllAsync(e => e.Cidade);
+                .GetAllAsync(null, e => e.Cidade);
             return View(list);
         }
 

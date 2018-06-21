@@ -15,7 +15,7 @@ namespace Cliente.UI.Services
         {
         }
 
-        public override List<Endereco> GetAll(params Expression<Func<Endereco, object>>[] includeProperties)
+        public override List<Endereco> GetAll(Expression<Func<Endereco, bool>> where, params Expression<Func<Endereco, object>>[] includeProperties)
         {
             IQueryable<Models.Endereco> queryable = DbSet;
             var list = queryable
@@ -26,7 +26,7 @@ namespace Cliente.UI.Services
             return list;
         }
 
-        public async override Task<List<Endereco>> GetAllAsync(params Expression<Func<Endereco, object>>[] includeProperties)
+        public async override Task<List<Endereco>> GetAllAsync(Expression<Func<Endereco, bool>> where, params Expression<Func<Endereco, object>>[] includeProperties)
         {
             IQueryable<Models.Endereco> queryable = DbSet;
 

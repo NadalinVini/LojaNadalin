@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Marca>
+﻿@model IEnumerable<Cliente>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,6 +15,15 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Nome)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cpf)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Numero)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +32,15 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cpf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endereco.Cidade)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

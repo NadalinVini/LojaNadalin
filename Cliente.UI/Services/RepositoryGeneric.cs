@@ -24,14 +24,21 @@ namespace Cliente.UI.Services
             return DbSet.Find(id);
         }
 
-        public virtual List<T> GetAll(params Expression<Func<T, object>>[] includeProperties)
+        public virtual List<T> GetAll()
+        {
+            return DbSet.ToList();
+        }
+
+        public virtual List<T> GetAll(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> queryable = DbSet;
 
             foreach (var includeProperty in includeProperties)
                 queryable = queryable.Include(includeProperty);
 
-            return queryable.ToList();
+            return queryable
+                .Where(where)
+                .ToList();
         }
 
         public virtual bool Update(object id, T updated)
@@ -51,14 +58,22 @@ namespace Cliente.UI.Services
             return true;
         }
 
-        public virtual async Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
+
+        public virtual async Task<List<T>> GetAllAsync()
+        {
+            return await DbSet.ToListAsync();
+        }
+
+        public virtual async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> queryable = DbSet;
 
             foreach (var includeProperty in includeProperties)
                 queryable = queryable.Include(includeProperty);
 
-            return await queryable.ToListAsync();
+            return await queryable
+                .Where(where)
+                .ToListAsync();
         }
 
         public virtual async Task<T> GetAsync(object id)
@@ -73,7 +88,8 @@ namespace Cliente.UI.Services
             foreach (var includeProperty in includeProperties)
                 queryable = queryable.Include(includeProperty);
 
-            return await queryable.FirstOrDefaultAsync(where);
+            return await queryable
+                .FirstOrDefaultAsync(where);
         }
 
         public virtual async Task<bool> RemoveAsync(object id)

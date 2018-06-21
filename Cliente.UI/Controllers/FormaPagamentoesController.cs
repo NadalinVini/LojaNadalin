@@ -75,7 +75,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var formaPagamento = await repositoryFormaPagamento.GetAllAsync(m => m.Id == id);
+            var formaPagamento = await repositoryFormaPagamento.GetAsync(id.Value);
 
             if (formaPagamento == null)
             {

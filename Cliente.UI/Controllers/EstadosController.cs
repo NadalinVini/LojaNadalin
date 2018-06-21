@@ -74,7 +74,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var estado = await repositoryEstado.GetAllAsync(m => m.Id == id);
+            var estado = await repositoryEstado.GetAsync(id.Value);
 
             if (estado == null)
             {
