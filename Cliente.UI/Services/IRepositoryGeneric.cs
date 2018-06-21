@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Cliente.UI.Models;
 
 namespace Cliente.UI.Services
 {
@@ -22,5 +23,6 @@ namespace Cliente.UI.Services
         bool Remove(object id);
 
         List<T> Filter(Func<T, bool> where);
+        
     }
 }

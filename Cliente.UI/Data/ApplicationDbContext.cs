@@ -28,5 +28,9 @@ namespace Cliente.UI.Data
         public DbSet<Cliente.UI.Models.Estado> Estado { get; set; }
 
         public DbSet<Cliente.UI.Models.Cidade> Cidade { get; set; }
+
+        public DbSet<Cliente.UI.Models.FormaPagamento> FormaPagamento { get; set; }
+
+        public DbSet<Cliente.UI.Models.Marca> Marca { get; set; }
     }
 }

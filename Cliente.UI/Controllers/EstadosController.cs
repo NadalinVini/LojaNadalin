@@ -5,24 +5,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Cliente.UI.Data;
 using Cliente.UI.Models;
 
 namespace Cliente.UI.Controllers
 {
     public class EstadosController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly Services.IRepositoryGeneric<Estado> repositoryEstado;
 
-        public EstadosController(ApplicationDbContext context)
+        public EstadosController(Services.IRepositoryGeneric<Estado> repoEstado)
         {
-            _context = context;
+            repositoryEstado = repoEstado;
         }
 
         // GET: Estados
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Estado.ToListAsync());
+            var applicationDbContext = await repositoryEstado.GetAllAsync();
+            return View(applicationDbContext);
         }
 
         // GET: Estados/Details/5
@@ -33,8 +33,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var estado = await _context.Estado
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var estado = await repositoryEstado.GetAsync(id.Value);
             if (estado == null)
             {
                 return NotFound();
@@ -46,6 +45,7 @@ namespace Cliente.UI.Controllers
         // GET: Estados/Create
         public IActionResult Create()
         {
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "EstadoId", "Nome");
             return View();
         }
 
@@ -58,10 +58,11 @@ namespace Cliente.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(estado);
-                await _context.SaveChangesAsync();
+
+                await repositoryEstado.InsertAsync(estado);
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "EstadoId", "Nome");
             return View(estado);
         }
 
@@ -73,11 +74,13 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var estado = await _context.Estado.SingleOrDefaultAsync(m => m.Id == id);
+            var estado = await repositoryEstado.GetAllAsync(m => m.Id == id);
+
             if (estado == null)
             {
                 return NotFound();
             }
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "EstadoId", "Nome");
             return View(estado);
         }
 
@@ -95,24 +98,10 @@ namespace Cliente.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(estado);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EstadoExists(estado.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await repositoryEstado.UpdateAsync(id, estado);
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "EstadoId", "Nome");
             return View(estado);
         }
 
@@ -124,8 +113,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var estado = await _context.Estado
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var estado = await repositoryEstado.GetAsync(id);
             if (estado == null)
             {
                 return NotFound();
@@ -139,15 +127,8 @@ namespace Cliente.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var estado = await _context.Estado.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Estado.Remove(estado);
-            await _context.SaveChangesAsync();
+            await repositoryEstado.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool EstadoExists(int id)
-        {
-            return _context.Estado.Any(e => e.Id == id);
         }
     }
 }

@@ -12,18 +12,20 @@ namespace Cliente.UI.Controllers
 {
     public class CidadesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly Services.IRepositoryGeneric<Cidade> repositoryCidade;
+        private readonly Services.IRepositoryGeneric<Estado> repositoryEstado;
 
-        public CidadesController(ApplicationDbContext context)
+        public CidadesController(Services.IRepositoryGeneric<Cidade> repoCidade,
+                                 Services.IRepositoryGeneric<Estado> repoEstado)
         {
-            _context = context;
+            repositoryCidade = repoCidade;
         }
 
         // GET: Cidades
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Cidade.Include(c => c.Estado);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = await repositoryCidade.GetAllAsync();
+            return View(applicationDbContext);
         }
 
         // GET: Cidades/Details/5
@@ -34,9 +36,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var cidade = await _context.Cidade
-                .Include(c => c.Estado)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var cidade = await repositoryCidade.GetAsync(id.Value);
             if (cidade == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace Cliente.UI.Controllers
         // GET: Cidades/Create
         public IActionResult Create()
         {
-            ViewData["EstadoId"] = new SelectList(_context.Estado, "Id", "Nome");
+            ViewData["Id"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome");
             return View();
         }
 
@@ -61,11 +61,10 @@ namespace Cliente.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cidade);
-                await _context.SaveChangesAsync();
+                await repositoryCidade.InsertAsync(cidade);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(_context.Estado, "Id", "Nome", cidade.EstadoId);
+            ViewData["EstadoId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome", cidade.EstadoId);
             return View(cidade);
         }
 
@@ -77,12 +76,13 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var cidade = await _context.Cidade.SingleOrDefaultAsync(m => m.Id == id);
+            var cidade = await repositoryCidade.GetAllAsync(m => m.Id == id);
+
             if (cidade == null)
             {
                 return NotFound();
             }
-            ViewData["EstadoId"] = new SelectList(_context.Estado, "Id", "Nome", cidade.EstadoId);
+            ViewData["EstadoId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome");
             return View(cidade);
         }
 
@@ -100,25 +100,10 @@ namespace Cliente.UI.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(cidade);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CidadeExists(cidade.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await repositoryCidade.UpdateAsync(cidade.Id, cidade);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(_context.Estado, "Id", "Nome", cidade.EstadoId);
+            ViewData["EstadoId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome", cidade.EstadoId);
             return View(cidade);
         }
 
@@ -130,9 +115,7 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var cidade = await _context.Cidade
-                .Include(c => c.Estado)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var cidade = await repositoryCidade.GetAsync(id);
             if (cidade == null)
             {
                 return NotFound();
@@ -146,15 +129,8 @@ namespace Cliente.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cidade = await _context.Cidade.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Cidade.Remove(cidade);
-            await _context.SaveChangesAsync();
+            await repositoryCidade.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CidadeExists(int id)
-        {
-            return _context.Cidade.Any(e => e.Id == id);
         }
     }
 }
