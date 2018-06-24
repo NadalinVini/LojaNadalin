@@ -145,6 +145,7 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("FormaPagamento");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Cliente.UI.Models.ItemNota", b =>
                 {
                     b.Property<int>("Id")
@@ -169,6 +170,8 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("ItemNota");
                 });
 
+=======
+>>>>>>> 137e93d17f0a904fa47d83cc4226007cabbd58b3
             modelBuilder.Entity("Cliente.UI.Models.Marca", b =>
                 {
                     b.Property<long>("Id")
@@ -182,6 +185,7 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("Marca");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Cliente.UI.Models.NotaFiscal", b =>
                 {
                     b.Property<Guid>("Id")
@@ -204,6 +208,8 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("NotaFiscal");
                 });
 
+=======
+>>>>>>> 137e93d17f0a904fa47d83cc4226007cabbd58b3
             modelBuilder.Entity("Cliente.UI.Models.Produto", b =>
                 {
                     b.Property<long>("Id")
@@ -221,6 +227,7 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("Produto");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Cliente.UI.Models.TipoPagamento", b =>
                 {
                     b.Property<int>("Id")
@@ -240,6 +247,8 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("TipoPagamento");
                 });
 
+=======
+>>>>>>> 137e93d17f0a904fa47d83cc4226007cabbd58b3
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -371,6 +380,7 @@ namespace Cliente.UI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Cliente.UI.Models.ItemNota", b =>
                 {
                     b.HasOne("Cliente.UI.Models.NotaFiscal", "NotaFiscal")
@@ -396,6 +406,8 @@ namespace Cliente.UI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+=======
+>>>>>>> 137e93d17f0a904fa47d83cc4226007cabbd58b3
             modelBuilder.Entity("Cliente.UI.Models.Produto", b =>
                 {
                     b.HasOne("Cliente.UI.Models.Marca", "Marca")
@@ -404,6 +416,7 @@ namespace Cliente.UI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("Cliente.UI.Models.TipoPagamento", b =>
                 {
                     b.HasOne("Cliente.UI.Models.FormaPagamento", "FormaPagamento")
@@ -412,6 +425,8 @@ namespace Cliente.UI.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+=======
+>>>>>>> 137e93d17f0a904fa47d83cc4226007cabbd58b3
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")

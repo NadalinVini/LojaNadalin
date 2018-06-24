@@ -36,11 +36,14 @@ namespace Cliente.UI.Data
         public DbSet<Cliente.UI.Models.Cliente> Cliente { get; set; }
 
         public DbSet<Cliente.UI.Models.Produto> Produto { get; set; }
+<<<<<<< HEAD
 
         public DbSet<Cliente.UI.Models.TipoPagamento> TipoPagamento { get; set; }
 
         public DbSet<Cliente.UI.Models.NotaFiscal> NotaFiscal { get; set; }
 
         public DbSet<Cliente.UI.Models.ItemNota> ItemNota { get; set; }
+=======
+>>>>>>> 137e93d17f0a904fa47d83cc4226007cabbd58b3
     }
 }
