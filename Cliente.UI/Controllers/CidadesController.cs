@@ -19,12 +19,13 @@ namespace Cliente.UI.Controllers
                                  Services.IRepositoryGeneric<Estado> repoEstado)
         {
             repositoryCidade = repoCidade;
+            repositoryEstado = repoEstado;
         }
 
         // GET: Cidades
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var applicationDbContext = await repositoryCidade.GetAllAsync();
+            var applicationDbContext = await repositoryCidade.GetAllAsync(c => id == null || c.EstadoId == id, c => c.Estado);
             return View(applicationDbContext);
         }
 
@@ -48,7 +49,7 @@ namespace Cliente.UI.Controllers
         // GET: Cidades/Create
         public IActionResult Create()
         {
-            ViewData["Id"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome");
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "Id", "Nome");
             return View();
         }
 
@@ -64,7 +65,7 @@ namespace Cliente.UI.Controllers
                 await repositoryCidade.InsertAsync(cidade);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome", cidade.EstadoId);
+            ViewData["EstadoId"] = new SelectList(await repositoryCidade.GetAllAsync(), "EstadoId", "Nome", cidade.EstadoId);
             return View(cidade);
         }
 
@@ -76,13 +77,16 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var cidade = await repositoryCidade.GetAllAsync(m => m.Id == id);
+            var cidade = await repositoryCidade.GetAsync(id.Value);
 
             if (cidade == null)
             {
                 return NotFound();
             }
-            ViewData["EstadoId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome");
+
+            var list = await repositoryEstado.GetAllAsync();
+
+            ViewData["EstadoId"] = new SelectList(list, "Id", "Nome", cidade.EstadoId);
             return View(cidade);
         }
 
@@ -103,7 +107,7 @@ namespace Cliente.UI.Controllers
                 await repositoryCidade.UpdateAsync(cidade.Id, cidade);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(repositoryCidade.GetAll(), "Id", "Nome", cidade.EstadoId);
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "Id", "Nome");
             return View(cidade);
         }
 
@@ -116,6 +120,7 @@ namespace Cliente.UI.Controllers
             }
 
             var cidade = await repositoryCidade.GetAsync(id);
+
             if (cidade == null)
             {
                 return NotFound();

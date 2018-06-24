@@ -11,9 +11,10 @@ using System;
 namespace Cliente.UI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180624180626_TipoPagamento")]
+    partial class TipoPagamento
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,30 +146,6 @@ namespace Cliente.UI.Data.Migrations
                     b.ToTable("FormaPagamento");
                 });
 
-            modelBuilder.Entity("Cliente.UI.Models.ItemNota", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("NotaFiscalId");
-
-                    b.Property<decimal>("PercentualDesconto");
-
-                    b.Property<long>("ProdutoId");
-
-                    b.Property<decimal>("Quantidade");
-
-                    b.Property<decimal>("ValorUnitario");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NotaFiscalId");
-
-                    b.HasIndex("ProdutoId");
-
-                    b.ToTable("ItemNota");
-                });
-
             modelBuilder.Entity("Cliente.UI.Models.Marca", b =>
                 {
                     b.Property<long>("Id")
@@ -180,28 +157,6 @@ namespace Cliente.UI.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Marca");
-                });
-
-            modelBuilder.Entity("Cliente.UI.Models.NotaFiscal", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<long>("ClienteId");
-
-                    b.Property<string>("ClienteId1");
-
-                    b.Property<DateTime>("DataEmissao");
-
-                    b.Property<int>("TipoPagamentoId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId1");
-
-                    b.HasIndex("TipoPagamentoId");
-
-                    b.ToTable("NotaFiscal");
                 });
 
             modelBuilder.Entity("Cliente.UI.Models.Produto", b =>
@@ -368,31 +323,6 @@ namespace Cliente.UI.Data.Migrations
                     b.HasOne("Cliente.UI.Models.Cidade", "Cidade")
                         .WithMany()
                         .HasForeignKey("CidadeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Cliente.UI.Models.ItemNota", b =>
-                {
-                    b.HasOne("Cliente.UI.Models.NotaFiscal", "NotaFiscal")
-                        .WithMany()
-                        .HasForeignKey("NotaFiscalId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Cliente.UI.Models.Produto", "Produto")
-                        .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Cliente.UI.Models.NotaFiscal", b =>
-                {
-                    b.HasOne("Cliente.UI.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId1");
-
-                    b.HasOne("Cliente.UI.Models.TipoPagamento", "TipoPagamento")
-                        .WithMany()
-                        .HasForeignKey("TipoPagamentoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

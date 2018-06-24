@@ -10,23 +10,26 @@ using Cliente.UI.Models;
 
 namespace Cliente.UI.Controllers
 {
-    public class MarcasController : Controller
+    public class ProdutosController : Controller
     {
+        private readonly Services.IRepositoryGeneric<Produto> repositoryProduto;
         private readonly Services.IRepositoryGeneric<Marca> repositoryMarca;
 
-        public MarcasController(Services.IRepositoryGeneric<Marca> repoMarca)
+        public ProdutosController(Services.IRepositoryGeneric<Produto> repoProduto,
+                                  Services.IRepositoryGeneric<Marca> repoMarca  )
         {
+            repositoryProduto = repoProduto;
             repositoryMarca = repoMarca;
         }
 
-        // GET: Marcas
-        public async Task<IActionResult> Index()
+        // GET: Produtos
+        public async Task<IActionResult> Index(int? id)
         {
-            var applicationDbContext = await repositoryMarca.GetAllAsync();
+            var applicationDbContext = await repositoryProduto.GetAllAsync(c => id == null || c.MarcaId == id, c => c.Marca);
             return View(applicationDbContext);
         }
 
-        // GET: Marcas/Details/5
+        // GET: Produtos/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -34,39 +37,40 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var marca = await repositoryMarca.GetAsync(id.Value);
-            if (marca == null)
+            var produto = await repositoryProduto.GetAsync(id.Value);
+
+            if (produto == null)
             {
                 return NotFound();
             }
 
-            return View(marca);
+            return View(produto);
         }
 
-        // GET: Marcas/Create
+        // GET: Produtos/Create
         public IActionResult Create()
         {
             ViewData["MarcaId"] = new SelectList(repositoryMarca.GetAll(), "Id", "Nome");
-            return View();          
+            return View();
         }
 
-        // POST: Marcas/Create
+        // POST: Produtos/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome")] Marca marca)
+        public async Task<IActionResult> Create([Bind("Id,Nome,MarcaId")] Produto produto)
         {
             if (ModelState.IsValid)
             {
-                await repositoryMarca.InsertAsync(marca);
+                await repositoryProduto.InsertAsync(produto);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MarcaId"] = new SelectList(repositoryMarca.GetAll(), "Id", "Nome");
-            return View(marca);
+            ViewData["MarcaId"] = new SelectList(await repositoryProduto.GetAllAsync(), "MarcaId", "Nome", produto.MarcaId);
+            return View(produto);
         }
 
-        // GET: Marcas/Edit/5
+        // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -74,37 +78,42 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var marca = await repositoryMarca.GetAsync(id.Value);
-            if (marca == null)
+            var produto = await repositoryProduto.GetAsync(id.Value);
+
+            if (produto == null)
             {
                 return NotFound();
             }
-            ViewData["MarcaId"] = new SelectList(repositoryMarca.GetAll(), "Id", "Nome");
-            return View(marca);
+
+            var list = await repositoryMarca.GetAllAsync();
+
+            ViewData["MarcaId"] = new SelectList(list, "Id", "Nome", produto.MarcaId);
+            return View(produto);
         }
 
-        // POST: Marcas/Edit/5
+        // POST: Produtos/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Nome")] Marca marca)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Nome,MarcaId")] Produto produto)
         {
-            if (id != marca.Id)
+            if (id != produto.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await repositoryMarca.UpdateAsync(id, marca);
+                await repositoryProduto.UpdateAsync(produto.Id, produto);
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["MarcaId"] = new SelectList(repositoryMarca.GetAll(), "Id", "Nome");
-            return View(marca);
+            } 
+
+            ViewData["MarcaId"] = new SelectList(repositoryMarca.GetAll(), "Id", "Id", produto.MarcaId);
+            return View(produto);
         }
 
-        // GET: Marcas/Delete/5
+        // GET: Produtos/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -112,23 +121,23 @@ namespace Cliente.UI.Controllers
                 return NotFound();
             }
 
-            var marca = await repositoryMarca.GetAsync(id);
-            if (marca == null)
+            var produto = await repositoryProduto.GetAsync(id);
+
+            if (produto == null)
             {
                 return NotFound();
             }
 
-            return View(marca);
+            return View(produto);
         }
 
-        // POST: Marcas/Delete/5
+        // POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            await repositoryMarca.RemoveAsync(id);
+            await repositoryProduto.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

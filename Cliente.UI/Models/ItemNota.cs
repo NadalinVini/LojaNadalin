@@ -4,6 +4,8 @@ namespace Cliente.UI.Models
 {
     public class ItemNota
     {
+        public int Id { get; set; }
+
         public long ProdutoId { get; set; }
         public Produto Produto { get; set; }
 

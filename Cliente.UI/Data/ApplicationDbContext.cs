@@ -32,5 +32,15 @@ namespace Cliente.UI.Data
         public DbSet<Cliente.UI.Models.FormaPagamento> FormaPagamento { get; set; }
 
         public DbSet<Cliente.UI.Models.Marca> Marca { get; set; }
+
+        public DbSet<Cliente.UI.Models.Cliente> Cliente { get; set; }
+
+        public DbSet<Cliente.UI.Models.Produto> Produto { get; set; }
+
+        public DbSet<Cliente.UI.Models.TipoPagamento> TipoPagamento { get; set; }
+
+        public DbSet<Cliente.UI.Models.NotaFiscal> NotaFiscal { get; set; }
+
+        public DbSet<Cliente.UI.Models.ItemNota> ItemNota { get; set; }
     }
 }
