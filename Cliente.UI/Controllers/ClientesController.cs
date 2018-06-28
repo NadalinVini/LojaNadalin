@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cliente.UI.Controllers
 {
@@ -14,10 +15,12 @@ namespace Cliente.UI.Controllers
     {
         private readonly Services.IRepositoryGeneric<Endereco> repositoryEndereco;
         private readonly Services.IRepositoryGeneric<Cliente.UI.Models.Cliente> repositoryCliente;
-        
+        private readonly UserManager<Models.Cliente> _userManager;
+
 
         public ClientesController(Services.IRepositoryGeneric<Cliente.UI.Models.Cliente> repoCliente,
-                                  Services.IRepositoryGeneric<Endereco> repoEndereco)
+                                  Services.IRepositoryGeneric<Endereco> repoEndereco,
+                                  UserManager<Models.Cliente> userManager)
             
         {
             repositoryCliente = repoCliente;
@@ -27,7 +30,8 @@ namespace Cliente.UI.Controllers
         // GET: Clientes
         public async Task<IActionResult> Index()
         {            
-            var applicationDbContext = await repositoryCliente.GetAllAsync();
+            var applicationDbContext = await repositoryCliente
+                .GetAllAsync(x=>true, x=>x.Endereco);
             return View(applicationDbContext);
         }
 
@@ -63,7 +67,7 @@ namespace Cliente.UI.Controllers
         public async Task<IActionResult> Create([Bind("Nome,Cpf,EnderecoId,Numero,Complemento,Id,UserName,NormalizedUserName,Email,NormalizedEmail,EmailConfirmed,PasswordHash,SecurityStamp,ConcurrencyStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEnd,LockoutEnabled,AccessFailedCount")] Cliente.UI.Models.Cliente cliente)
         {
             if (ModelState.IsValid)
-            {
+           {                                
                 await repositoryCliente.InsertAsync(cliente);
                 return RedirectToAction(nameof(Index));
             }

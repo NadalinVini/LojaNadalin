@@ -28,7 +28,8 @@ namespace Cliente.UI.Controllers
         // GET: ItemNotas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = await repositoryItemNota.GetAllAsync();
+            var applicationDbContext = await repositoryItemNota
+                .GetAllAsync(x=>true, x => x.NotaFiscal, x=>x.Produto);
             return View(applicationDbContext);
         }
 
@@ -140,6 +141,6 @@ namespace Cliente.UI.Controllers
             var itemNota = await repositoryItemNota.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
-      
+
     }
 }

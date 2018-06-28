@@ -17,28 +17,48 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Cliente.UI</a>
+    <header>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Cliente.UI</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>                       
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a asp-area="" asp-controller="Enderecos" asp-action="Index">Cadastrar Endereços</a></li>
+                                <li><a asp-area="" asp-controller="Estados" asp-action="Index">Cadastrar Estados</a></li>
+                                <li><a asp-area="" asp-controller="Cidades" asp-action="Index">Cadastrar Cidades</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-area="" asp-controller="Clientes" asp-action="Index">Cadastrar Clientes</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-area="" asp-controller="TipoPagamentos" asp-action="Index">Cadastrar Tipo de Pagamento </a></li>
+                                <li><a asp-area="" asp-controller="FormaPagamentoes" asp-action="Index">Cadastrar Forma de Pagamento</a></li>
+                                <li><a asp-area="" asp-controller="NotasFiscais" asp-action="Index">Cadastrar Nota Fiscal</a></li>
+                                <li><a asp-area="" asp-controller="ItemNotas" asp-action="Index">Nota</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a asp-area="" asp-controller="Produtos" asp-action="Index">Cadastrar Produto</a></li>
+                                <li><a asp-area="" asp-controller="Marcas" asp-action="Index">Cadastrar Marca</a></li>                            
+                            </ul>
+                        </li>
+                    </ul>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                    <li><a asp-area="" asp-controller="Enderecos" asp-action="Index">Endereços</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
     <div class="container body-content">
         @RenderBody()
         <hr />

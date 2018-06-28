@@ -11,14 +11,16 @@ namespace Cliente.UI.Models
     public class Cliente : IdentityUser
     {     
         public string Nome { get; set; }
-        [RangeAttribute(11, 11)]
+        [StringLength(11, MinimumLength = 11)]
         public string Cpf { get; set; }
 
         public long? EnderecoId { get; set; }
         public Endereco Endereco { get; set; }
-        [RangeAttribute(1, 5)]
+        
         public int? Numero { get; set; }
         [StringLength(250, MinimumLength = 1)]
         public string Complemento { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

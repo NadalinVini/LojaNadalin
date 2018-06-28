@@ -25,7 +25,8 @@ namespace Cliente.UI.Controllers
         // GET: NotasFiscais
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = await repositoryNota.GetAllAsync();
+            var applicationDbContext = await repositoryNota
+                .GetAllAsync(x=>true, x=>x.TipoPagamento);
             return View(applicationDbContext);
         }
 
