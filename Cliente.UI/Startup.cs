@@ -39,6 +39,12 @@ namespace Cliente.UI
             services.AddTransient(typeof(IRepositoryGeneric<>), typeof(RepositoryGeneric<>));
             services.AddTransient(typeof(IRepositoryGeneric<Models.Endereco>), typeof(EnderecoRepository));
 
+            //Services Facebook
+            services.AddAuthentication().AddFacebook(options =>
+            {options.AppId = Configuration["Authentication:Facebook:AppId"];
+            options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+    });
+
             services.AddMvc();
         }
 

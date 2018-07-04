@@ -11,9 +11,10 @@ using System;
 namespace Cliente.UI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180703215422_Pessoa")]
+    partial class Pessoa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,15 +192,17 @@ namespace Cliente.UI.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("DataEmissao");
+                    b.Property<long>("ClienteId");
 
-                    b.Property<long>("PessoaId");
+                    b.Property<string>("ClienteId1");
+
+                    b.Property<DateTime>("DataEmissao");
 
                     b.Property<int>("TipoPagamentoId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PessoaId");
+                    b.HasIndex("ClienteId1");
 
                     b.HasIndex("TipoPagamentoId");
 
@@ -415,10 +418,9 @@ namespace Cliente.UI.Data.Migrations
 
             modelBuilder.Entity("Cliente.UI.Models.NotaFiscal", b =>
                 {
-                    b.HasOne("Cliente.UI.Models.Pessoa", "Pessoa")
+                    b.HasOne("Cliente.UI.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("PessoaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ClienteId1");
 
                     b.HasOne("Cliente.UI.Models.TipoPagamento", "TipoPagamento")
                         .WithMany()

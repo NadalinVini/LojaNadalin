@@ -44,5 +44,7 @@ namespace Cliente.UI.Data
 
         public DbSet<Cliente.UI.Models.ItemNota> ItemNota { get; set; }
 
+        public DbSet<Cliente.UI.Models.Pessoa> Pessoa { get; set; }
+
     }
 }

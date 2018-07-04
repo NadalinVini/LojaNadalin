@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class CidadesController : Controller
     {
         private readonly Services.IRepositoryGeneric<Cidade> repositoryCidade;
@@ -107,7 +109,7 @@ namespace Cliente.UI.Controllers
                 await repositoryCidade.UpdateAsync(cidade.Id, cidade);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "Id", "Nome");
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "Id", "Nome", cidade.EstadoId);
             return View(cidade);
         }
 

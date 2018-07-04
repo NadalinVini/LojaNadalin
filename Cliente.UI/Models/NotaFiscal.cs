@@ -12,7 +12,7 @@ namespace Cliente.UI.Models
         public int TipoPagamentoId { get; set; }
         public TipoPagamento TipoPagamento { get; set; }
 
-        public long ClienteId { get; set; }
-        public Cliente Cliente { get; set; }
+        public long PessoaId { get; set; }
+        public Pessoa Pessoa { get; set; }
     }
 }
