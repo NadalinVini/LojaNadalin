@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class ProdutosController : Controller
     {
         private readonly Services.IRepositoryGeneric<Produto> repositoryProduto;
@@ -38,6 +40,7 @@ namespace Cliente.UI.Controllers
             }
 
             var produto = await repositoryProduto.GetAsync(id.Value);
+            ViewData["MarcaId"] = new SelectList(repositoryMarca.GetAll(), "MarcaId", "Nome");
 
             if (produto == null)
             {

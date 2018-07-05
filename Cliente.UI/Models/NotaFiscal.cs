@@ -6,7 +6,7 @@ namespace Cliente.UI.Models
     {
         public System.Guid Id { get; set; }
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:DD/MM/YYYY}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public System.DateTime DataEmissao { get; set; }
 
         public int TipoPagamentoId { get; set; }

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class PessoasController : Controller
     {
         private readonly Services.IRepositoryGeneric<Pessoa> repositoryPessoa;
@@ -23,9 +25,9 @@ namespace Cliente.UI.Controllers
         }
 
         // GET: Pessoas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var applicationDbContext = await repositoryPessoa.GetAllAsync();
+            var applicationDbContext = await repositoryPessoa.GetAllAsync(c => id == null || c.EnderecoId == id, c => c.Endereco);
             return View(applicationDbContext);
         }
 
@@ -38,6 +40,7 @@ namespace Cliente.UI.Controllers
             }
 
             var pessoa = await repositoryPessoa.GetAsync(id.Value);
+            ViewData["EnderecoId"] = new SelectList(repositoryEndereco.GetAll(), "Id", "Nome");
             if (pessoa == null)
             {
                 return NotFound();
@@ -65,7 +68,7 @@ namespace Cliente.UI.Controllers
                 await repositoryPessoa.InsertAsync(pessoa);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(await repositoryEndereco.GetAllAsync(), "Id", "Cep", pessoa.EnderecoId);
+            ViewData["EnderecoId"] = new SelectList(await repositoryEndereco.GetAllAsync(), "Id", "Cep", pessoa.Id);
             return View(pessoa);
         }
 

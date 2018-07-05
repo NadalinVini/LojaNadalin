@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cliente.UI.Controllers
 {
@@ -16,6 +17,7 @@ namespace Cliente.UI.Controllers
     {
         private readonly Services.IRepositoryGeneric<Cidade> repositoryCidade;
         private readonly Services.IRepositoryGeneric<Estado> repositoryEstado;
+        
 
         public CidadesController(Services.IRepositoryGeneric<Cidade> repoCidade,
                                  Services.IRepositoryGeneric<Estado> repoEstado)
@@ -40,6 +42,7 @@ namespace Cliente.UI.Controllers
             }
 
             var cidade = await repositoryCidade.GetAsync(id.Value);
+            ViewData["EstadoId"] = new SelectList(repositoryEstado.GetAll(), "EstadoId", "Nome");
             if (cidade == null)
             {
                 return NotFound();

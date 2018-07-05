@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class MarcasController : Controller
     {
         private readonly Services.IRepositoryGeneric<Marca> repositoryMarca;

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class EnderecosController : Controller
     {
         private readonly Services.IRepositoryGeneric<Endereco> repositoryEndereco;
@@ -43,6 +45,7 @@ namespace Cliente.UI.Controllers
             }
 
             var endereco = await repositoryEndereco.GetAsync(id.Value);
+            ViewData["CidadeId"] = new SelectList(repositoryCidade.GetAll(), "CidadeId", "Nome");
             if (endereco == null)
             {
                 return NotFound();

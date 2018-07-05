@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class ClientesController : Controller
     {
         private readonly Services.IRepositoryGeneric<Endereco> repositoryEndereco;
@@ -55,7 +57,7 @@ namespace Cliente.UI.Controllers
         // GET: Clientes/Create
         public IActionResult Create()
         {
-            ViewData["EnderecoId"] = new SelectList(repositoryEndereco.GetAll(), "Id", "Cep");
+            ViewData["EnderecoId"] = new SelectList(repositoryEndereco.GetAll(), "EnderecoId", "Cep");
             return View();
         }
 
@@ -71,7 +73,7 @@ namespace Cliente.UI.Controllers
                 await repositoryCliente.InsertAsync(cliente);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(repositoryEndereco.GetAll(), "Id", "Cep", cliente.EnderecoId);
+            ViewData["EnderecoId"] = new SelectList(repositoryEndereco.GetAll(), "EnderecoId", "Cep", cliente.EnderecoId);
             return View(cliente);
         }
 

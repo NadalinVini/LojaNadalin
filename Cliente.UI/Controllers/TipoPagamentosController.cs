@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class TipoPagamentosController : Controller
     {
         private readonly Services.IRepositoryGeneric<TipoPagamento> repositoryTipoPagamento;
@@ -38,6 +40,7 @@ namespace Cliente.UI.Controllers
             }
 
             var tipoPagamento = await repositoryTipoPagamento.GetAsync(id.Value);
+            ViewData["FormaPagamentoId"] = new SelectList(repositoryFormaPagamento.GetAll(), "FormaPagamentoId", "Nome");
 
             if (tipoPagamento == null)
             {

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cliente.UI.Data;
 using Cliente.UI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cliente.UI.Controllers
 {
+    [Authorize]
     public class ItemNotasController : Controller
     {
         private readonly Services.IRepositoryGeneric<ItemNota> repositoryItemNota;
@@ -42,6 +44,8 @@ namespace Cliente.UI.Controllers
             }
 
             var itemNota = await repositoryItemNota.GetAsync(id.Value);
+            ViewData["ProdutoId"] = new SelectList(repositoryProduto.GetAll(), "ProdutoId", "Nome");
+            ViewData["NotaFiscalId"] = new SelectList(repositoryNota.GetAll(), "NotaFiscalId", "Id");
             if (itemNota == null)
             {
                 return NotFound();

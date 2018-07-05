@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cliente.UI.Models
 {
@@ -21,6 +22,7 @@ namespace Cliente.UI.Models
         [StringLength(250, MinimumLength = 1)]
         public string Complemento { get; set; }
         [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Password { get; set; }
     }
 }
